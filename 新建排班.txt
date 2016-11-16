@@ -1,0 +1,63 @@
+INSERT INTO t_shop_schedule_plan (schedule_plan_no,title,schedule_month,city_id,created,create_by,updated,update_by,active)
+ values (201609099,'9月','2016-09',1,'2016-09-01 14:26:56'
+,207,'2016-09-01 14:26:56',0,'Y');
+
+
+INSERT INTO t_shop_schedule_plan_detail (shop_schedule_plan_id,schedule_date,on_duty)
+values ((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-01','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-02','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-03','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-04','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-05','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-06','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-07','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-08','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-09','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-10','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-11','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-12','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-13','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-14','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-15','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-16','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-17','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-18','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-19','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-20','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-21','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-22','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-23','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-24','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-25','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-26','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-27','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-28','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-29','Y'),
+((SELECT id from t_shop_schedule_plan order by id DESC limit 1),'2016-09-30','Y');
+
+A:用户名相同  a:用户名不同
+B:地址一致  b:地址不一致
+C:送达时间一致  c:送达时间不一致
+PS：默认没考虑系统自动接单
+-----------------------------------------------------------------------------------
+①3个条件，总计ABC ABc AbC Abc aBC aBc abc abC 8种订单组合
+②下单ABC（2单），客服全部确认后，小哥抢1单，查看是否被指派另一单，以及查看订单信息是否正常
+③下单ABC（10单或更多），客服全部确认后，小哥抢1单，查看是否被指派其他订单，以及查看订单信息是否正常
+    1.若是，则将该参考单上报问题，客服拒绝或撤回或其他操作，查看是否影响其他已被指派的订单.
+    2.若是，则将非参考订单的任意单上报问题，客服拒绝或撤回或其他操作，查看是否影响其他已被指派订单
+    3.若订单量过大，送不过来，联系客服撤回部分订单，查看这些被撤回的订单是否状态正常，以及可以正常操作
+        （1）继续下单（3单），3个条件信息与上述被撤回的订单信息一致，客服全部确认，小哥抢1单，查看其他订单是否正常指派
+        （2）继续下单（3单），3个条件信息与上述被撤回的订单信息一致，客服确认部分订单（2单），小哥抢1单，查看订单指派情况
+        （3）继续下单（3单），3个条件信息与上述被撤回订单不一致，客服确认全部订单，小哥抢一单，查看订单指派情况
+④下单ABC（2单），客服确认1单，小哥抢1单，查看是否被指派另一单，以及查看订单信息是否正常
+⑤下单ABC（10单），客服确认5单，小哥抢1单，查看是否被指派另4单，以及被指派未确认的5单，并查看订单信息及其他显示的信息
+⑥下单ABc/AbC/Abc/aBC/aBc/abc/abC(5单)，客服全部确认后，小哥抢1单，查看是否会被指派其他订单。
+⑦下单ABC（10单或更多），确认接受参考单后，小哥app查看待抢单列表是否有该订单，依次接受剩下的订单，查看其是否会显示在小哥待抢单列表中
+⑧下单ABC（10单或更多），确认接受参考单后，小哥甲，乙同时看到待抢参考单，甲抢单后，乙点击抢单，查看二人是否订单分发正常
+⑨若参考单，类似单关系成功，检查sign_code是否一样
+10.参考单，类似单关系成功，购买之前，通过上报问题等操作，撤销，拒绝，改约其中一订单，查看参考单和类似单关系是否接触，即similarid均归0
+11.先下一单大订单，然后下一单普通订单，查看是否两者similarid是否为类似单关系
+
+---------------------------------------------------------------------------------------
+注：上文中10单是对多订单考虑下取的一个数值，也可以是9,8等等。
+注⑥：对于非ABC的情况组合，只需考虑能否跑通正常流程即可。
