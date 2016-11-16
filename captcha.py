@@ -68,7 +68,7 @@ e2.grid(row=1, column=1)
 #Button(root, text = 'C', fg = '#EF7321', width = 3, command = lambda: clear()).grid(row = 1, column = 0,columnspan=2)
 
 Button(root, text="   查询   ", command = set_captcha).grid(row=2,column=0)
-Button(root, text="   复位   ", command = clear_info).grid(row=2,column=1)
+Button(root, text="   复位   ", command = clear_info).grid(row=2,column=12)
 
 root.mainloop()
 #print haversine(116.489195,39.996912,116.480486,40.004802224)

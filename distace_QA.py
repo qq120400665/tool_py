@@ -7,15 +7,16 @@ import MySQLdb
 from sshtunnel import SSHTunnelForwarder  
 def get_orderinfo(orderid):
 	#db = MySQLdb.connect(host="115.29.208.235",user="dbadmin",passwd="dbadminpass",db="lyancafe",port=3306,charset="utf8")
-	server = SSHTunnelForwarder(('115.29.208.235', 22),    
-         ssh_password="lyan2014",  
-         ssh_username="zhaiy",  
-         remote_bind_address=('115.29.208.235', 3306)) 
+	#跳板机连接MYSQL
+	server = SSHTunnelForwarder(('115.29.208.235', 22),
+         ssh_password="lyan2014",
+         ssh_username="zhaiy",
+         remote_bind_address=('115.29.208.235', 3306))
 	server.start()
-	db = MySQLdb.connect(host='127.0.0.1',              
-                           port=server.local_bind_port,  
-                           user='dbadmin',  
-                           passwd='dbadminpass',  
+	db = MySQLdb.connect(host='127.0.0.1',
+                           port=server.local_bind_port,
+                           user='dbadmin',
+                           passwd='dbadminpass',
                            db='lyancafe')
 	cursor = db.cursor()
 	sql1 = "select shop_id,customer_address_id from orders where id = " + orderid
