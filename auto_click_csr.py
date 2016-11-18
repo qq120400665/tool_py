@@ -30,7 +30,7 @@ class AUTOCLICK:
             return False
 
     def find_eachlink(self):
-        self.dr.get('http://optest.lyancafe.com/csr/home')
+        self.dr.get('http://op.lyancafe.com/csr/home')
         time.sleep(1)
         self.dr.find_element_by_id('loginName').send_keys('zhaiyuan')
         self.dr.find_element_by_id('password').send_keys('lyan2014')
@@ -40,7 +40,7 @@ class AUTOCLICK:
         for i in self.link_object:
             self.link_list.append(i.get_attribute('href'))
             self.link_list_name.append(i.text)
-        self.link_list.remove('http://optest.lyancafe.com/csr/logout')
+        self.link_list.remove('http://op.lyancafe.com/csr/logout')
         #self.link_list.remove('')
         #self.link_list_name.remove(u'閫�鍑虹郴缁�')
         #self.link_list_name.remove(u'缁撶畻绠＄悊')
@@ -125,8 +125,8 @@ class AUTOCLICK:
             print '-------now save %s ---------' % x
             x+=1
 #url = 'http://optest.lyancafe.com/csr/home'
-#a = AUTOCLICK()
-#a.click_eachlink()
+a = AUTOCLICK()
+a.click_eachlink()
 #html = a.getHtml(url)
 #print html
 #a.getImg(html)
