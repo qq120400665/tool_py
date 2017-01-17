@@ -20,6 +20,7 @@ class AUTOCLICK:
         self.link_list_name = []
         self.link_pass = []
         self.link_fail = []
+        self.link_wrong = []
 
     def element_exist(self,ele):
         '''check element exist or not by tag name'''
@@ -30,7 +31,7 @@ class AUTOCLICK:
             return False
 
     def find_eachlink(self):
-        self.dr.get('http://op.lyancafe.com/csr/home')
+        self.dr.get('http://optest.lyancafe.com/csr/home')
         time.sleep(1)
         self.dr.find_element_by_id('loginName').send_keys('zhaiyuan')
         self.dr.find_element_by_id('password').send_keys('lyan2014')
@@ -38,42 +39,50 @@ class AUTOCLICK:
         time.sleep(3)
         self.link_object = self.dr.find_elements_by_tag_name('a')
         for i in self.link_object:
-            self.link_list.append(i.get_attribute('href'))
-            self.link_list_name.append(i.text)
-        self.link_list.remove('http://op.lyancafe.com/csr/logout')
+            if i.get_attribute('href') is not None:
+                self.link_list.append(i.get_attribute('href'))
+                self.link_list_name.append(i.text)
+        self.link_list.remove('http://optest.lyancafe.com/csr/logout')
         #self.link_list.remove('')
-        #self.link_list_name.remove(u'閫�鍑虹郴缁�')
+        self.link_list_name.remove(u'退出系统')
         #self.link_list_name.remove(u'缁撶畻绠＄悊')
         #self.link_list.remove('')
         print self.link_list
+        for i in self.link_list:
+            print i
         print len(self.link_list)
         #print self.link_list_name
         print 'link_list_name:',json.dumps(self.link_list_name, encoding='UTF-8', ensure_ascii=False)
         print len(self.link_list_name)
-        return self.link_list
+        return self.link_list,self.link_list_name
 
     def click_eachlink(self):
-        self.link_list = self.find_eachlink()
+        (self.link_list,self.link_list_name) = self.find_eachlink()
         n = 1
-        for i in self.link_list:
+        for i in range(0,len(self.link_list)):
             '''print n,'now connecting',i,'............'
             self.dr.get(i)
             n = n+1'''
             try:
-                self.dr.get(i)
-                if self.dr.find_element_by_tag_name('title') != 'Apache Tomcat/7.0.54 - Error report' and self.element_exist('h2') is False:
-                    print n,'now conneting',i,'....PASS'
-                    self.link_pass.append(i)
+                self.dr.get(str(self.link_list[i]))
+                print self.dr.find_element_by_tag_name('title').get_attribute('innerHTML')
+                if self.dr.find_element_by_tag_name('title').get_attribute('innerHTML') != 'Apache Tomcat/7.0.54 - Error report' and self.element_exist('h2') is False:
+                    print n,'now conneting',self.link_list[i],'....PASS'
+                    self.link_pass.append(self.link_list_name[i])
+                    n+=1
                 else:
-                    print n,'now conneting',i,'....PAGE ERROR'
-                    self.link_fail.append(i)
-                n = n + 1
+                    print n,'now conneting',self.link_list[i],'....FAIL'
+                    self.link_fail.append(self.link_list_name[i])
+                    n+=1
             except Exception,e:
-                print Exception,':',e
+                print n,Exception,':',e
+                self.link_wrong.append(self.link_list_name[i])
                 print 'wrongs!!!'
                 continue
-            time.sleep(2)
-        print 'finish,failed page as follows:',self.link_fail
+                n+=1
+                time.sleep(2)
+        print 'finish,failed pages as follows:',json.dumps(self.link_fail,encoding='UTF-8',ensure_ascii=False)
+        print 'finish,wrong pages as follows:',json.dumps(self.link_wrong,encoding='UTF-8',ensure_ascii=False)
 
     def getHtml(self,url):
         page = urllib.urlopen(url)
