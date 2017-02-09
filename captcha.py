@@ -8,7 +8,7 @@ from sshtunnel import SSHTunnelForwarder
 def get_captcha(phonenum):
 	#db = MySQLdb.connect(host="115.29.208.235",user="dbadmin",passwd="dbadminpass",db="lyancafe",port=3306,charset="utf8")
 	server = SSHTunnelForwarder(('114.55.141.208', 22),    
-         ssh_password="zy123456",  
+         ssh_password="lyan2014",
          ssh_username="zhaiy",  
          remote_bind_address=('rdsirbzrunuiayj.mysql.rds.aliyuncs.com', 3306)) 
 	server.start()
