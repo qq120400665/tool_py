@@ -30,8 +30,8 @@ class AUTOCLICK:
         except Exception,e:
             return False
 
-    def find_eachlink(self):
-        self.dr.get('http://optest.lyancafe.com/csr/home')
+    def find_eachlink(self,url):
+        self.dr.get(url)
         time.sleep(1)
         self.dr.find_element_by_id('loginName').send_keys('zhaiyuan')
         self.dr.find_element_by_id('password').send_keys('lyan2014')
@@ -42,22 +42,19 @@ class AUTOCLICK:
             if i.get_attribute('href') is not None:
                 self.link_list.append(i.get_attribute('href'))
                 self.link_list_name.append(i.text)
-        self.link_list.remove('http://optest.lyancafe.com/csr/logout')
+        self.link_list.remove(url[:-4]+'logout')
         #self.link_list.remove('')
         self.link_list_name.remove(u'退出系统')
-        #self.link_list_name.remove(u'缁撶畻绠＄悊')
-        #self.link_list.remove('')
         print self.link_list
         for i in self.link_list:
             print i
         print len(self.link_list)
-        #print self.link_list_name
         print 'link_list_name:',json.dumps(self.link_list_name, encoding='UTF-8', ensure_ascii=False)
         print len(self.link_list_name)
         return self.link_list,self.link_list_name
 
     def click_eachlink(self):
-        (self.link_list,self.link_list_name) = self.find_eachlink()
+        (self.link_list,self.link_list_name) = self.find_eachlink(url)
         n = 1
         for i in range(0,len(self.link_list)):
             '''print n,'now connecting',i,'............'
@@ -133,13 +130,10 @@ class AUTOCLICK:
             urllib.urlretrieve(imgurl,'%s.gif' % x,cbk)
             print '-------now save %s ---------' % x
             x+=1
-#url = 'http://optest.lyancafe.com/csr/home'
+url = 'http://optest.lyancafe.com/csr/home'
+print url[:-4]+'logout'
 a = AUTOCLICK()
 a.click_eachlink()
-#html = a.getHtml(url)
-#print html
-#a.getImg(html)
-##print getjpg(html)
 
 # from selenium import webdriver
 # dr = webdriver.Chrome()
