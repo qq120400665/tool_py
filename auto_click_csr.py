@@ -38,6 +38,7 @@ class AUTOCLICK:
         self.dr.find_element_by_class_name('btn').click()
         time.sleep(3)
         self.link_object = self.dr.find_elements_by_tag_name('a')
+        print self.link_object
         for i in self.link_object:
             if i.get_attribute('href') is not None:
                 self.link_list.append(i.get_attribute('href'))
