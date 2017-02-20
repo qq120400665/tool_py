@@ -131,7 +131,7 @@ class AUTOCLICK:
             urllib.urlretrieve(imgurl,'%s.gif' % x,cbk)
             print '-------now save %s ---------' % x
             x+=1
-url = 'http://optest.lyancafe.com/csr/home'
+url = 'http://op.lyancafe.com/csr/home'
 print url[:-4]+'logout'
 a = AUTOCLICK()
 a.click_eachlink()
